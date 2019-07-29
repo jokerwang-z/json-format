@@ -1,0 +1,23 @@
+{
+  "name": "@jokerwang/json-format",
+  "version": "1.0.2",
+  "description": "json to stringify a dom structure Object",
+  "main": "@wang/json-format.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --entry ./json-format.js -w ./json-format.js --output-path dist --output-filename json-format.min.js --output-library-target umd"
+  },
+  "author": "wang",
+  "license": "ISC",
+  "keywords": [
+    "json-format",
+    "jokerwang"
+  ],
+  "devDependencies": {
+    "webpack": "^4.38.0",
+    "webpack-cli": "^3.3.6"
+  },
+  "dependencies": {
+
+  }
+}
