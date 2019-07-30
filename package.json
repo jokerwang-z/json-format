@@ -1,6 +1,6 @@
 {
   "name": "@jokerwang/json-format",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "json to stringify a dom structure Object",
   "main": "dist/json-format.min.js",
   "scripts": {
