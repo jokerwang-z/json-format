@@ -10,8 +10,8 @@
     }
 
     this.structure = 'structure-';
-    this.closeIcon = '-';
-    this.openIcon = '+';
+    this.closeIcon = '<svg t="1564458467154" class="icon" viewBox="0 -200 1024 1224" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5087" width="16" height="16"><path d="M904 64c30.9 0 56 25.1 56 56v784c0 30.9-25.1 56-56 56H120c-30.9 0-56-25.1-56-56V120c0-30.9 25.1-56 56-56h784m0-64H120C53.7 0 0 53.7 0 120v784c0 66.3 53.7 120 120 120h784c66.3 0 120-53.7 120-120V120c0-66.3-53.7-120-120-120z" fill="#1296db" p-id="5088"></path><path d="M736 480H288c-17.7 0-32 14.3-32 32s14.3 32 32 32h448c17.7 0 32-14.3 32-32s-14.3-32-32-32z" fill="#1296db" p-id="5089"></path></svg>';
+    this.openIcon = '<svg t="1564457800369" class="icon" viewBox="0 -200 1024 1224" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5092" width="16" height="16"><path d="M915.746268 0h-807.911811C48.273134 0 0 48.482772 0 107.834457v807.911811c0 59.561323 48.482772 107.834457 107.834457 107.834456h807.911811c59.561323 0 107.834457-48.482772 107.834456-107.834456v-807.911811c0-59.343622-48.482772-107.834457-107.834456-107.834457z m56.634456 915.746268c0 31.139276-25.495181 56.634457-56.634456 56.634456h-807.911811c-31.139276 0-56.634457-25.495181-56.634457-56.634456v-807.911811c0-31.139276 25.495181-56.634457 56.634457-56.634457h807.911811c31.139276 0 56.634457 25.495181 56.634456 56.634457v807.911811z m-267.288189-429.451087H537.293606V318.488189a25.688693 25.688693 0 0 0-25.704819-25.704819A25.688693 25.688693 0 0 0 485.875906 318.488189v167.806992H318.068913c-14.215055 0-25.704819 11.497827-25.704819 25.495181a25.688693 25.688693 0 0 0 25.704819 25.704819H485.875906v167.806992a25.688693 25.688693 0 0 0 25.704818 25.704819 25.688693 25.688693 0 0 0 25.704819-25.704819V537.495181H705.108661a25.688693 25.688693 0 0 0 25.704819-25.704819c0-14.206992-11.497827-25.495181-25.704819-25.495181z" fill="#1296db" p-id="5093"></path></svg>';
     this.dom = dom;
 
     this.clear();
@@ -27,9 +27,10 @@
     const openIcon = this.openIcon;
     const closeIcon = this.closeIcon;
     this.box.addEventListener('click', function (e) {
-      const nodeName = e.target.nodeName;
-      if (nodeName.toLowerCase() === 'i') {
-        const p = e.target.parentNode;
+      const nodeName = e.target.nodeName.toLowerCase();
+      if (nodeName === 'svg' || nodeName === 'i') {
+        const target = nodeName === 'svg' ? e.target.parentNode : e.target; // i
+        const p = target.parentNode;
         const className = p.className;
 
         let div = document.createElement('div');
@@ -54,7 +55,7 @@
 
             p.parentNode.insertBefore(div, currentNode);
 
-            e.target.innerText = openIcon;
+            target.innerHTML = openIcon;
           } else {
             matched.push(currentNode);
             nextClose(currentNode);
@@ -66,7 +67,7 @@
             return;
           }
           currentNode.outerHTML = currentNode.innerHTML;
-          e.target.innerText = closeIcon;
+          target.innerHTML = closeIcon;
         }
 
         if (p && p.nextSibling && p.nextSibling.className == 'hidden') {
@@ -99,7 +100,7 @@
 
     if (icon) {
       let i = document.createElement('i');
-      i.innerText = icon;
+      i.innerHTML = icon;
       i.style.cssText = 'cursor:pointer;font-style:normal;';
       dom.appendChild(i);
     }
