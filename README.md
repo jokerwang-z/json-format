@@ -16,8 +16,8 @@ var json = [
   }
 ];
 var jsonObject = JSON.parse(json);
-this.jsonFormat = new JSONFormatter(document.body);
-this.jsonFormat.format(jsonObject);
+var jsonFormat = new JSONFormatter(document.body);
+jsonFormat.format(jsonObject);
 ```
 
 ![markdown](https://github.com/jokerwang-z/json-format/blob/develop/example.png)

@@ -19,8 +19,8 @@
         var t = e.target.value;
         try {
           var json = JSON.parse(t);
-          this.jsonFormat = new JSONFormatter(document.getElementById('test'));
-          this.jsonFormat.format(json);
+          var jsonFormat = new JSONFormatter(document.getElementById('test'));
+          jsonFormat.format(json);
         } catch (e) {
           throw e;
         }
