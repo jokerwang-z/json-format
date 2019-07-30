@@ -150,9 +150,9 @@
     }
     //
     if (this.getTag(value) === '[object String]') {
-      if ((value+'').length) {
+      // if ((value+'').length) {
         str += "\"" + value + "\""
-      }
+      // }
     } else {
       str += value;
     }
@@ -184,10 +184,25 @@
     //
     let increment = 0;
 
-    let fun = (json, hack) => {
+    let fun = (json, hack, isLast) => {
       if (this.isArray(json)) {
-        if (json && json.length == 0) {
-          json.push('');
+        // []该情况
+        if (json.length == 0) {
+          // json.push('');
+          if (hack === OBJECT_NEXT_ARRAY) {
+            if (isLast) {
+              this.appendToFragment('span', '[]', false, '');
+            } else {
+              this.appendToFragment('span', '[],', false, '');
+            }
+          } else if (hack === ARRAT_SIBLING_DOT) {
+            this.appendToFragment('span', this.getSign('', padding - 2, nbsp), true, '');
+            this.appendToFragment('span', '[],', false, '');
+          } else {
+            this.appendToFragment('span', this.getSign('', padding - 2, nbsp), true, '');
+            this.appendToFragment('span', '[]', false, '');
+          }
+          padding -= 2;
         }
         for (let i = 0; i < json.length; i++) {
           const value = json[i];
@@ -195,7 +210,6 @@
           if (i == 0) {
             increment++;
             if (hack === OBJECT_NEXT_ARRAY) {
-              this.appendToFragment('span', '', true, '');
               this.appendToFragment('span', '[', false, this.structure + increment, this.closeIcon);
             } else {
               this.appendToFragment('span', this.getSign('', padding - 2, nbsp), true, '');
@@ -295,7 +309,11 @@
             this.appendToFragment('span', str, true);
 
             padding += 2;
-            fun(value, OBJECT_NEXT_ARRAY); // 处理 {arr:    []} 问题
+            if (i === keys.length - 1) {
+              fun(value, OBJECT_NEXT_ARRAY, true); // 处理 {arr:    []} 问题
+            } else {
+              fun(value, OBJECT_NEXT_ARRAY); // 处理 {arr:    []} 问题
+            }
 
           } else {
             // 增加键值
