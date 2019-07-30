@@ -22,8 +22,8 @@ JSONFormatter.prototype.listenExpand = function () {
   const closeIcon = this.closeIcon;
   this.box.addEventListener('click', function (e) {
     const nodeName = e.target.nodeName.toLowerCase();
-    if (nodeName === 'svg' || nodeName === 'i') {
-      const target = nodeName === 'svg' ? e.target.parentNode : e.target; // i
+    if (nodeName === 'svg' || nodeName === 'i' || nodeName === 'path') {
+      const target = nodeName === 'svg' ? e.target.parentNode : nodeName === 'path' ? e.target.parentNode.parentNode : e.target;
       const p = target.parentNode;
       const className = p.className;
 
