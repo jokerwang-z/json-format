@@ -1,5 +1,3 @@
-
-
 function JSONFormatter(dom) {
   if (!this instanceof JSONFormatter) {
     return new JSONFormatter(dom);

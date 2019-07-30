@@ -1,6 +1,2 @@
 node_modules
 .vscode
-webpack.dev.config.js
-src
-public
-assets
