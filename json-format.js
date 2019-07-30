@@ -12,10 +12,13 @@
     this.structure = 'structure-';
     this.closeIcon = '-';
     this.openIcon = '+';
+    this.dom = dom;
+
+    this.clear();
 
     this.fragment = document.createDocumentFragment();
     this.box = document.createElement('div');
-    dom.appendChild(this.box);
+    this.dom.appendChild(this.box);
 
     this.listenExpand();
   };
@@ -74,9 +77,6 @@
           nextClose(p);
         }
 
-        // console.log(p);
-        // console.log(p.nextElementSibling, p.nextSibling)
-        // || p.nextSibling
       }
     }, false);
   }
@@ -176,6 +176,8 @@
     const ARRAY_NEXT_OBJECT = 'array-next-object';
     // 处理 [[],[]] 问题
     const ARRAT_SIBLING_DOT = 'array-sibling-dot';
+    // 处理 {{},{}} 问题
+    const OBJECT_SIBLING_DOT = 'object-sibling-dot';
     //
     const FIRST_ARRAY = 'first-array';
     const FIRST_OBJECT = 'first-object';
@@ -184,7 +186,6 @@
 
     let fun = (json, hack) => {
       if (this.isArray(json)) {
-        isAA = false;
         if (json && json.length == 0) {
           json.push('');
         }
@@ -194,11 +195,11 @@
           if (i == 0) {
             increment++;
             if (hack === OBJECT_NEXT_ARRAY) {
-              this.appendToFragment('span', this.getSign('', 0, nbsp), true, '');
-              this.appendToFragment('span', this.getSign('[', 0, nbsp), false, this.structure + increment, this.closeIcon);
+              this.appendToFragment('span', '', true, '');
+              this.appendToFragment('span', '[', false, this.structure + increment, this.closeIcon);
             } else {
               this.appendToFragment('span', this.getSign('', padding - 2, nbsp), true, '');
-              this.appendToFragment('span', this.getSign('[', 0, nbsp), false, this.structure + increment, this.closeIcon);
+              this.appendToFragment('span', '[', false, this.structure + increment, this.closeIcon);
             }
           }
 
@@ -229,19 +230,28 @@
             padding -= 2;
             this.appendToFragment('span', this.getSign('', padding, nbsp), true, '');
             if (hack === ARRAT_SIBLING_DOT) {
-              this.appendToFragment('span', this.getSign(']', 0, nbsp), true, this.structure + increment);
-              this.appendToFragment('span', this.getSign(',', 0, nbsp), false, '');
+              this.appendToFragment('span', ']', true, this.structure + increment);
+              this.appendToFragment('span', ',', false, '');
             } else {
-              this.appendToFragment('span', this.getSign(']', 0, nbsp), false, this.structure + increment);
+              this.appendToFragment('span', ']', false, this.structure + increment);
             }
             increment--;
           }
         }
       } else if (this.isObject(json)) {
-        // 增加标记
-        // json.__proto__.mark = true;
-        //
         const keys = Object.keys(json);
+        // {}该情况
+        if (keys.length === 0) {
+          if (hack === OBJECT_SIBLING_DOT) {
+            this.appendToFragment('span', '{},', false, '');
+          } else if (hack === ARRAY_NEXT_OBJECT) {
+            this.appendToFragment('span', this.getSign('{},', padding - 2, nbsp), false, '');
+            padding -= 2;
+          } else {
+            this.appendToFragment('span', '{}', false, '');
+          }
+     
+        }
         for (let i = 0; i < keys.length; i++) {
           const key = keys[i];
           const value = json[key];
@@ -251,15 +261,15 @@
             increment++;
             if (hack === ARRAY_NEXT_OBJECT) {
               this.appendToFragment('span', this.getSign('', padding - 2, nbsp), true, '');
-              this.appendToFragment('span', this.getSign('{', 0, nbsp), false, this.structure + increment, this.closeIcon);
+              this.appendToFragment('span', '{', false, this.structure + increment, this.closeIcon);
             } else {
-              this.appendToFragment('span', this.getSign('', 0, nbsp), true, '');
-              this.appendToFragment('span', this.getSign('{', 0, nbsp), false, this.structure + increment, this.closeIcon);
+              this.appendToFragment('span', '', true, '');
+              this.appendToFragment('span', '{', false, this.structure + increment, this.closeIcon);
             }
           }
 
           //
-          if (hack === FIRST_OBJECT) {
+          if (hack === FIRST_OBJECT && i === 0) {
             padding += 2;
           }
 
@@ -268,8 +278,16 @@
             let str = this.getKeyStr(key, padding, nbsp);
             this.appendToFragment('span', str, true);
 
-            padding += 2;
-            fun(value);
+            // {} 该情况不加padding
+            if (Object.keys(value).length) {
+              padding += 2;
+            }
+
+            if (i < keys.length - 1) {
+              fun(value, OBJECT_SIBLING_DOT)
+            } else {
+              fun(value);
+            }
 
           } else if (this.isArray(value)) {
 
@@ -291,8 +309,14 @@
           // 增加右大括号
           if (i == keys.length - 1) {
             padding -= 2;
-            this.appendToFragment('span', this.getSign('', padding, nbsp), true, '');
-            this.appendToFragment('span', this.getSign('}', 0, nbsp), false, this.structure + increment);
+            if (hack === OBJECT_SIBLING_DOT) {
+              this.appendToFragment('span', this.getSign('', padding, nbsp), true, '');
+              this.appendToFragment('span', '}', true, this.structure + increment);
+              this.appendToFragment('span', ',', false, '');
+            } else {
+              this.appendToFragment('span', this.getSign('', padding, nbsp), true, '');
+              this.appendToFragment('span', '}', false, this.structure + increment);
+            }
             increment--;
           }
 
@@ -309,6 +333,9 @@
     }
 
     this.box.appendChild(this.fragment);
+  }
+  JSONFormatter.prototype.clear = function () {
+    this.dom.innerHTML = '';
   }
 
   

@@ -14,7 +14,7 @@
   <script>
     window.onload = function () {
       var textarea = document.getElementById('textarea');
-      textarea.addEventListener('input', function(e) {
+      textarea.addEventListener('blur', function(e) {
         var t = e.target.value;
         try {
           var json = JSON.parse(t);
@@ -28,4 +28,29 @@
   </script>
 </body>
 </html>
+
+<!-- 
+  {
+    "obj": {
+      "ui": [{},{},1,2,{},{"name": 3}]
+    },
+    "name": {},
+    "a": {},
+    "new": 89,
+    "arr": [[],[[[[[[1,2,3], 4], []]]]]]
+  }
+  [
+    [],[],[1,2,{"obj": {"a": "b"}},{},{
+      "jj": {
+    "obj": {
+      "ui": [{},{},1,2,{},{"name": 3}]
+    },
+    "name": {},
+    "a": {},
+    "new": 89,
+    "arr": [[],[[[[[[1,2,3], 4], []]]]]]
+  }
+    }]
+  ]
+ -->
 
