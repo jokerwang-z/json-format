@@ -1,8 +1,8 @@
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define(['exports'], factory) :
-      (factory((global.JSONFormatter = {})));
-}(this, (function (exports) {
+// (function (global, factory) {
+//   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+//     typeof define === 'function' && define.amd ? define(['exports'], factory) :
+//       (factory((global.JSONFormatter = {})));
+// }(this, (function (exports) {
 
   function JSONFormatter(dom) {
     if (!this instanceof JSONFormatter) {
@@ -358,7 +358,12 @@
   }
 
   
-  exports.JSONFormatter = JSONFormatter;
-})));
+//   exports.JSONFormatter = JSONFormatter;
+// })));
 
+if (window) {
+  window.JSONFormatter = JSONFormatter;
+}
+
+export default JSONFormatter;
 
