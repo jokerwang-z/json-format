@@ -20,5 +20,5 @@ this.jsonFormat = new JSONFormatter(document.body);
 this.jsonFormat.format(jsonObject);
 ```
 
-![markdown](https://www.mdeditor.com/images/logos/markdown.png "90")
+![markdown](https://github.com/jokerwang-z/json-format/blob/develop/example.png)
 
